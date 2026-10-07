@@ -12,11 +12,13 @@ func main() { // Il lit le fichier, applique chaque règle de modification dans 
 	texte, _ := os.ReadFile(fichier)
 	contenu := string(texte)
 
-	matrice := ft.CrearinMatrice(contenu)
+	matrice := ft.CreerMatrice(contenu)
 	fmt.Print(matrice)
 	matrice = ft.Hex(matrice)
 	matrice = ft.Bin(matrice)
-	result := ft.RefaireTexte(matrice)
+	matrice = ft.Upp(matrice)
+	result := ft.RefaireTexte_mat(matrice)
+	fmt.Print(result)
 	os.WriteFile("result.txt", []byte(result), 0644)
 }
 
