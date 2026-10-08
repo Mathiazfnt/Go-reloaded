@@ -1,42 +1,9 @@
 package fonction
 
-import "strconv"
-
-func IsUpper(sentence string) bool {
-	result := false
-	var sentence2 = []byte(sentence)
-
-	for i := 0; i < len(sentence); i++ {
-		result = false
-
-		if sentence2[i] >= 65 && sentence2[i] <= 90 {
-			result = true
-		}
-
-		if result == false {
-			return false
-		}
-	}
-
-	return result
-}
-
-func toupper(sentence string) string {
-	var tempo rune
-	var result string
-
-	for i := 0; i < len(sentence); i++ {
-		if sentence[i] >= 97 && sentence[i] <= 122 {
-			tempo = rune(sentence[i])
-			tempo -= 32
-			result += string(tempo)
-		} else {
-			result += string(rune(sentence[i]))
-		}
-	}
-
-	return result
-}
+import ("strconv"
+		ft "Go-reloaded/fonction"
+		"strings"
+)
 
 func Upp(matrice [][]string) [][]string {
 	for mot := 0; mot < len(matrice); mot++ {
@@ -58,8 +25,8 @@ func Upp(matrice [][]string) [][]string {
 			mot--
 
 			for i := 0; i < nombre; i++ {
-				texte := RefaireTexte_tab(matrice[mot])
-				texte = toupper(texte)
+				texte := ft.RefaireTexte_tab(matrice[mot])
+				texte = strings.ToUpper(texte)
 
 				matrice[mot] = []string{}
 
