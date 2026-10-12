@@ -11,21 +11,40 @@ import (
 	fp "Go-reloaded/fonction/ponctuation"
 )
 
-func main() { // Il lit le fichier, applique chaque règle de modification dans l'ordre.
-	texte, _ := os.ReadFile(os.Args[1])
+func main() {
+	if len(os.Args) != 3 {
+		fmt.Println("Utilisation : go run . sample.txt result.txt")
+		return
+	}
+
+	texte, err := os.ReadFile(os.Args[1])
+	if err != nil {
+		fmt.Println("Il y a une erreur :", err)
+		return
+	}
+
 	contenu := string(texte)
+	lignes := strings.Split(contenu, "\n")
 
-	tab := ft.CreerMatrice(contenu)
-	tab = regles(tab)
+	for i := 0; i < len(lignes); i++ {
+		tab := ft.Creertab(lignes[i])
+		tab = regles(tab)
+		lignes[i] = strings.Join(tab, " ")
+	}
 
-	result := strings.Join(tab, " ")
-	os.WriteFile("result.txt", []byte(result), 0644)
+	result := strings.Join(lignes, "\n")
 
-	fmt.Print("tout marche")
+	sortie := os.Args[2]
+	tabbyte := []byte(result)
+
+	err = os.WriteFile(sortie, tabbyte, os.FileMode(os.O_CREATE|os.O_WRONLY|os.O_TRUNC))
+	if err != nil {
+		fmt.Println("Il y a une erreur :", err)
+		return
+	}
 }
 
-
-func regles(tab []string) []string{
+func regles(tab []string) []string {
 	tab = fn.Hex(tab)
 	tab = fn.Bin(tab)
 	tab = fn.An(tab)
@@ -34,7 +53,7 @@ func regles(tab []string) []string{
 	tab = fc.Cap(tab)
 	tab = fp.Ponct_spl(tab)
 	tab = fp.Trois_point(tab)
-	
+	tab = fp.Apostrophe(tab)
+
 	return tab
 }
-

@@ -2,7 +2,7 @@ package fonction
 
 import "strings"
 
-func CreerMatrice(phrase string) []string {
+func Creertab(phrase string) []string {
 	var matrice []string
 	mots := strings.Fields(phrase)
 
