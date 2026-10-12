@@ -1,27 +1,23 @@
 package fonction
 
-import ("strconv"
-		ft "Go-reloaded/fonction"
-		"strings"
+import (
+	"strconv"
+	"strings"
 )
-func Low(matrice [][]string) [][]string {
-	for mot := 0; mot < len(matrice); mot++ {
-		if len(matrice[mot]) >= 4 &&
-			matrice[mot][1] == "l" &&
-			matrice[mot][2] == "o" &&
-			matrice[mot][3] == "w" {
 
-			// Si c'est (low), on ajoute 1
-			if len(matrice[mot]) == 5 {
-				matrice[mot] = []string{"(", "l", "o", "w", "1", ")"}
+func Low(tab []string) []string {
+	for mot := 0; mot < len(tab); mot++ {
+		if strings.HasPrefix(tab[mot], "(low") {
+
+			nombre := 1
+
+			if tab[mot] != "(low)" {
+				texte := tab[mot][6 : len(tab[mot])-1]
+				nombre, _ = strconv.Atoi(texte)
 			}
 
-			nombre, _ := strconv.Atoi(matrice[mot][4])
+			tab = append(tab[:mot], tab[mot+1:]...)
 
-			// Supprime la ligne (low)
-			matrice = append(matrice[:mot], matrice[mot+1:]...)
-
-			// On commence par le mot juste avant
 			mot--
 
 			for i := 0; i < nombre; i++ {
@@ -29,15 +25,7 @@ func Low(matrice [][]string) [][]string {
 					break
 				}
 
-				texte := ft.RefaireTexte_tab(matrice[mot])
-				texte = strings.ToLower(texte)
-
-				matrice[mot] = []string{}
-
-				for _, lettre := range texte {
-					matrice[mot] = append(matrice[mot], string(lettre))
-				}
-
+				tab[mot] = strings.ToLower(tab[mot])
 				mot--
 			}
 
@@ -45,5 +33,6 @@ func Low(matrice [][]string) [][]string {
 		}
 	}
 
-	return matrice
+	return tab
 }
+

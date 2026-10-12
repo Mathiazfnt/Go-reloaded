@@ -1,20 +1,16 @@
 package fonction
 
-func Ponct_spl(matrice [][]string) [][]string {
+func Ponct_spl(tab []string) []string {
 	ponct := []string{".", ",", "!", "?", ":", ";"}
 
-	for mot := range matrice {
-		if mot == 0 {  // evite de regarder le mot précédent quand on est sur le premier mot.
-			continue
-		}
-
+	for mot := 1; mot < len(tab); mot++ {
 		for cherche := range ponct {
-			if matrice[mot][0] == ponct[cherche] {
-				matrice[mot-1] = append(matrice[mot-1], matrice[mot][0])
-				matrice[mot] = matrice[mot][1:]
+			if len(tab[mot]) > 0 && tab[mot][0] == ponct[cherche][0] {
+				tab[mot-1] += string(tab[mot][0])
+				tab[mot] = tab[mot][1:]
 			}
 		}
 	}
 
-	return matrice
+	return tab
 }

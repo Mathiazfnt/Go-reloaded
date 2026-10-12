@@ -2,76 +2,32 @@ package fonction
 
 import "strings"
 
-func CreerMatrice(phrase string) [][]string {
-	var matrice [][]string
-	var mot string
-	runes := []rune(phrase)
+func CreerMatrice(phrase string) []string {
+	var matrice []string
+	mots := strings.Fields(phrase)
 
-	for i := 0; i < len(runes); i++ {
-		if runes[i] == '(' {
-			if mot != "" {
-				matrice = append(matrice, TransformerMot(mot))
-				mot = ""
+	for i := 0; i < len(mots); i++ {
+		if strings.HasPrefix(mots[i], "(") && !strings.HasSuffix(mots[i], ")") {
+			mot := mots[i]
+
+			for i+1 < len(mots) {
+				i++
+				mot += " " + mots[i]
+
+				if strings.HasSuffix(mots[i], ")") {
+					break
+				}
 			}
 
-			parenthese, fin := Parenthese(runes, i)
-			matrice = append(matrice, parenthese)
-			i = fin
-
-		} else if runes[i] == ' ' {
-			if mot != "" {
-				matrice = append(matrice, TransformerMot(mot))
-				mot = ""
-			}
-
+			matrice = append(matrice, mot)
 		} else {
-			mot += string(runes[i])
+			matrice = append(matrice, mots[i])
 		}
-	}
-
-	if mot != "" {
-		matrice = append(matrice, TransformerMot(mot))
 	}
 
 	return matrice
 }
 
-func Parenthese(phrase []rune, debut int) ([]string, int) {
-	var tab []string
-
-	for i := debut; i < len(phrase); i++ {
-		if phrase[i] != ' ' && phrase[i] != ',' {
-			tab = append(tab, string(phrase[i]))
-		}
-
-		if phrase[i] == ')' {
-			return tab, i
-		}
-	}
-
-	return tab, len(phrase)
-}
-
-func TransformerMot(texte string) []string {
-	var mot []string
-
-	for _, lettre := range texte {
-		mot = append(mot, string(lettre))
-	}
-
-	return mot
-}
-
-func RefaireTexte_mat(matrice [][]string) string {
-	var mots []string
-
-	for _, mot := range matrice {
-		mots = append(mots, RefaireTexte_tab(mot))
-	}
-
-	return strings.Join(mots, " ")
-}
-
 func RefaireTexte_tab(tab []string) string {
-	return strings.Join(tab, "")
+	return strings.Join(tab, " ")
 }

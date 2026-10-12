@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	ft "Go-reloaded/fonction"
 	fc "Go-reloaded/fonction/casse_mots"
@@ -14,23 +15,26 @@ func main() { // Il lit le fichier, applique chaque règle de modification dans 
 	texte, _ := os.ReadFile(os.Args[1])
 	contenu := string(texte)
 
-	matrice := ft.CreerMatrice(contenu)
-	matrice = regles(matrice)
+	tab := ft.CreerMatrice(contenu)
+	tab = regles(tab)
 
-	result := ft.RefaireTexte_mat(matrice)
+	result := strings.Join(tab, " ")
 	os.WriteFile("result.txt", []byte(result), 0644)
 
 	fmt.Print("tout marche")
 }
 
 
-func regles(matrice [][]string) [][]string{
-	matrice = fn.Hex(matrice)
-	matrice = fn.Bin(matrice)
-	matrice = fc.Upp(matrice)
-	matrice = fc.Low(matrice)
-	matrice = fc.Cap(matrice)
-	matrice = fp.Ponct_spl(matrice)
-	return matrice
+func regles(tab []string) []string{
+	tab = fn.Hex(tab)
+	tab = fn.Bin(tab)
+	tab = fn.An(tab)
+	tab = fc.Upp(tab)
+	tab = fc.Low(tab)
+	tab = fc.Cap(tab)
+	tab = fp.Ponct_spl(tab)
+	tab = fp.Trois_point(tab)
+	
+	return tab
 }
 
