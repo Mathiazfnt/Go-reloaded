@@ -3,26 +3,18 @@ package fonction
 import "strings"
 
 func Creertab(phrase string) []string {
-	var matrice []string
 	mots := strings.Fields(phrase)
+	var matrice []string
 
 	for i := 0; i < len(mots); i++ {
-		if strings.HasPrefix(mots[i], "(") && !strings.HasSuffix(mots[i], ")") {
-			mot := mots[i]
+		mot := mots[i]
 
-			for i+1 < len(mots) {
-				i++
-				mot += " " + mots[i]
-
-				if strings.HasSuffix(mots[i], ")") {
-					break
-				}
-			}
-
-			matrice = append(matrice, mot)
-		} else {
-			matrice = append(matrice, mots[i])
+		for strings.HasPrefix(mot, "(") && !strings.HasSuffix(mot, ")") && i+1 < len(mots) {
+			i++
+			mot += " " + mots[i]
 		}
+
+		matrice = append(matrice, mot)
 	}
 
 	return matrice

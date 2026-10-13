@@ -39,7 +39,7 @@ func Cap(tab []string) []string {
 
 			mot--
 
-			for i := 0; i < nombre; i++ {
+			for i := 0; i < Depassement(tab, mot, nombre); i++ {
 				if mot < 0 {
 					break
 				}
@@ -59,4 +59,3 @@ func Cap(tab []string) []string {
 
 	return tab
 }
-

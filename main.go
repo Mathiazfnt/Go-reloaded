@@ -9,6 +9,7 @@ import (
 	fc "Go-reloaded/fonction/casse_mots"
 	fn "Go-reloaded/fonction/conversions_numeriques__a_an"
 	fp "Go-reloaded/fonction/ponctuation"
+	fbcn "Go-reloaded/fonction/bonus/concversions_numeriques_bonus"
 )
 
 func main() {
@@ -45,15 +46,24 @@ func main() {
 }
 
 func regles(tab []string) []string {
+	// on commence par les regle avec les  ()
 	tab = fn.Hex(tab)
 	tab = fn.Bin(tab)
 	tab = fn.An(tab)
 	tab = fc.Upp(tab)
 	tab = fc.Low(tab)
 	tab = fc.Cap(tab)
+	// ensuite la ponctuation
 	tab = fp.Ponct_spl(tab)
 	tab = fp.Trois_point(tab)
-	tab = fp.Apostrophe(tab)
+	tab = fp.Apost_Guill(tab)
+
+	// bonus :
+	tab = fbcn.Oct(tab)
+	tab = fbcn.To_bin(tab)
+	tab = fbcn.To_hex(tab)
+	// tab = fb.Roman(tab)
+	// tab = fb.To_roman(tab)
 
 	return tab
 }

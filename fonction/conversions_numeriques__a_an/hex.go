@@ -1,26 +1,43 @@
+
 package fonction
 
-import "strconv"
+import (
+	"strconv"
+	"strings"
+	d "Go-reloaded/fonction/casse_mots"
+)
 
 func Hex(tab []string) []string { // Hexadécimal → décimal
 	for mot := 0; mot < len(tab); mot++ {
-		if len(tab[mot]) >= 5 {
-			if tab[mot][1] == 'h' &&
-				tab[mot][2] == 'e' &&
-				tab[mot][3] == 'x' {
+		if strings.HasPrefix(tab[mot], "(hex") {
+			nombre := 1
 
-				// Supprime (hex)
-				tab = append(tab[:mot], tab[mot+1:]...)
-
-				// On modifie le mot avant
-				mot--
-
-				// Hexadécimal -> décimal
-				nombre, _ := strconv.ParseInt(tab[mot], 16, 64)
-
-				// Décimal
-				tab[mot] = strconv.FormatInt(nombre, 10)
+			if tab[mot] != "(hex)" {
+				texte := tab[mot][6 : len(tab[mot])-1]
+				nombre, _ = strconv.Atoi(texte)
 			}
+
+			// Supprime (hex)
+			tab = append(tab[:mot], tab[mot+1:]...)
+			mot--
+
+			// Applique la règle aux mots précédents
+			for i := 0; i < d.Depassement(tab, mot, nombre); i++ {
+				if mot < 0 {
+					break
+				}
+
+				// Hexadécimal -> string(décimal)
+				tab[mot] = strings.ToUpper(tab[mot])
+				resultat, err := strconv.ParseInt(tab[mot], 16, 64)
+				if err == nil {
+					tab[mot] = strconv.FormatInt(resultat, 10)
+				}
+
+				mot--
+			}
+
+			mot += nombre
 		}
 	}
 

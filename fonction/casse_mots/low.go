@@ -16,11 +16,12 @@ func Low(tab []string) []string {
 				nombre, _ = strconv.Atoi(texte)
 			}
 
+			// Supprime (low)
 			tab = append(tab[:mot], tab[mot+1:]...)
 
 			mot--
 
-			for i := 0; i < nombre; i++ {
+			for i := 0; i < Depassement(tab, mot, nombre); i++ {
 				if mot < 0 {
 					break
 				}

@@ -1,37 +1,23 @@
 package fonction
 
+import "strings"
+
 func An(tab []string) []string {
-	liste := []string{"a", "e", "i", "o", "u", "h"}
-	liste2 := []string{"A", "E", "I", "O", "U", "H"}
+	liste := "aeiouhAEIOUH"
 
 	for mot := 0; mot < len(tab)-1; mot++ {
-		if tab[mot] == "a" {
-			if est_dedans(liste, tab[mot+1]) || est_dedans(liste2, tab[mot+1]) {
-				tab[mot] = "an"
+		if len(tab[mot+1]) == 0 {
+			if tab[mot] == "a" || tab[mot] == "A" {
+				if  strings.Contains(liste, tab[mot]){
+					tab[mot] += "n"
+				}
+			} else if tab[mot] == "an" || tab[mot] == "An" {
+				if !strings.Contains(liste, tab[mot]) {
+					tab[mot] = string(tab[mot][0])
+				}
 			}
-		} else if tab[mot] == "A" {
-			if est_dedans(liste, tab[mot+1]) || est_dedans(liste2, tab[mot+1]) {
-				tab[mot] = "An"
-			}
-		} else if tab[mot] == "an" {
-			if !est_dedans(liste, tab[mot+1]) && !est_dedans(liste2, tab[mot+1]) {
-				tab[mot] = "a"
-			}
-		} else if tab[mot] == "An" {
-			if !est_dedans(liste, tab[mot+1]) && !est_dedans(liste2, tab[mot+1]) {
-				tab[mot] = "A"
-			}
-		}
+		} 
 	}
 
 	return tab
-}
-
-func est_dedans(tab []string, recherche string) bool {
-	for elt := range tab {
-		if recherche == tab[elt] {
-			return true
-		}
-	}
-	return false
 }

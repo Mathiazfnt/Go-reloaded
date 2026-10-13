@@ -1,29 +1,45 @@
 package fonction
 
-import "strconv"
+import (
+	"strconv"
+	"strings"
+	d "Go-reloaded/fonction/casse_mots"
+)
+
 
 func Bin(tab []string) []string { // Binaire → décimal
 	for mot := 0; mot < len(tab); mot++ {
-		if len(tab[mot]) >= 5 {
-			if tab[mot][1] == 'b' &&
-				tab[mot][2] == 'i' &&
-				tab[mot][3] == 'n' {
+		if strings.HasPrefix(tab[mot], "(bin") {
+			nombre := 1
 
-				// Supprime (bin)
-				tab = append(tab[:mot], tab[mot+1:]...)
-
-				// On modifie le mot avant
-				mot--
-
-				// bin -> décimal
-				nombre, _ := strconv.ParseInt(tab[mot], 2, 64)
-
-				// Décimal
-				tab[mot] = strconv.FormatInt(nombre, 10)
+			if tab[mot] != "(bin)" {
+				texte := tab[mot][6 : len(tab[mot])-1]
+				nombre, _ = strconv.Atoi(texte)
 			}
+
+			// Supprime (bin)
+			tab = append(tab[:mot], tab[mot+1:]...)
+			mot--
+
+			// Applique la règle aux mots précédents
+			for i := 0; i < d.Depassement(tab, mot, nombre); i++ {
+				if mot < 0 {
+					break
+				}
+
+				// Binaire -> string(décimal)
+				resultat, err := strconv.ParseInt(tab[mot], 2, 64)
+				if err == nil {
+					tab[mot] = strconv.FormatInt(resultat, 10)
+				}
+
+				mot--
+			}
+
+			mot += nombre
 		}
 	}
 
 	return tab
 }
-			
+
