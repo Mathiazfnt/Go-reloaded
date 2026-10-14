@@ -6,10 +6,14 @@ import (
 	"strings"
 
 	ft "Go-reloaded/fonction"
+
 	fc "Go-reloaded/fonction/casse_mots"
 	fn "Go-reloaded/fonction/conversions_numeriques__a_an"
 	fp "Go-reloaded/fonction/ponctuation"
-	fbcn "Go-reloaded/fonction/bonus/concversions_numeriques_bonus"
+
+	fbcn "Go-reloaded/fonction/bonus/conversions_numeriques_bonus"
+	// froman "Go-reloaded/fonction/bonus/roman"
+	fm "Go-reloaded/fonction/bonus/nouveaux_modificateurs"
 )
 
 func main() {
@@ -29,7 +33,11 @@ func main() {
 
 	for i := 0; i < len(lignes); i++ {
 		tab := ft.Creertab(lignes[i])
-		tab = regles(tab)
+		tab, err = regles(tab)
+		if err != nil {
+			fmt.Printf("Erreur ligne %d : %v\n", i+1, err)
+			return
+		}
 		lignes[i] = strings.Join(tab, " ")
 	}
 
@@ -45,7 +53,7 @@ func main() {
 	}
 }
 
-func regles(tab []string) []string {
+func regles(tab []string) ([]string, error) {
 	// on commence par les regle avec les  ()
 	tab = fn.Hex(tab)
 	tab = fn.Bin(tab)
@@ -55,15 +63,21 @@ func regles(tab []string) []string {
 	tab = fc.Cap(tab)
 	// ensuite la ponctuation
 	tab = fp.Ponct_spl(tab)
-	tab = fp.Trois_point(tab)
+	tab = fp.Trois_point_Excla_inter(tab)
 	tab = fp.Apost_Guill(tab)
 
 	// bonus :
 	tab = fbcn.Oct(tab)
 	tab = fbcn.To_bin(tab)
 	tab = fbcn.To_hex(tab)
-	// tab = fb.Roman(tab)
-	// tab = fb.To_roman(tab)
+	//tab = froman.Roman(tab)
+	// tab = froman.To_roman(tab)
+	var err error
+	tab, err = fm.Rev(tab)
+	if err != nil {
+		return nil, err
+	}
+	tab = fm.Title(tab)
 
-	return tab
+	return tab, nil
 }

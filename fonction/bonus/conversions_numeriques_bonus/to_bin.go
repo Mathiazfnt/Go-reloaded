@@ -1,10 +1,10 @@
-package fonction
+package conversions_numeriques_bonus
 
 import (
 	"strconv"
 	"strings"
 
-	d "Go-reloaded/fonction/casse_mots"
+	f "Go-reloaded/fonction/casse_mots"
 )
 
 func To_bin(tab []string) []string { // Décimal → binaire
@@ -22,7 +22,7 @@ func To_bin(tab []string) []string { // Décimal → binaire
 			mot--
 
 			// Applique la règle aux mots précédents
-			for i := 0; i < d.Depassement(tab, mot, nombre); i++ {
+			for i := 0; i < f.Depassement(tab, mot, nombre); i++ {
 				if mot < 0 {
 					break
 				}

@@ -1,4 +1,4 @@
-package fonction
+package casse_mots
 
 import (
 	"strconv"
@@ -36,4 +36,3 @@ func Low(tab []string) []string {
 
 	return tab
 }
-

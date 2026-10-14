@@ -1,10 +1,9 @@
-
-package fonction
+package conversions_numeriques__a_an
 
 import (
+	d "Go-reloaded/fonction/casse_mots"
 	"strconv"
 	"strings"
-	d "Go-reloaded/fonction/casse_mots"
 )
 
 func Hex(tab []string) []string { // Hexadécimal → décimal

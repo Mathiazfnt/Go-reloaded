@@ -1,0 +1,37 @@
+
+package conversions_numeriques__a_an
+
+import "testing"
+
+func TestHex(t *testing.T) {
+	tests := []struct {
+		nom     string
+		entree  []string
+		attendu []string
+	}{
+		{"hexadecimal simple", []string{"1E", "(hex)"}, []string{"30"}},
+		{"hexadecimal minuscule", []string{"ff", "(hex)"}, []string{"255"}},
+		{"zero", []string{"0", "(hex)"}, []string{"0"}},
+		{"lettres majuscules", []string{"A", "(hex)"}, []string{"10"}},
+		{"sans marqueur", []string{"1E", "hello"}, []string{"1E", "hello"}},
+	}
+
+	for _, test := range tests {
+		t.Run(test.nom, func(t *testing.T) {
+			resultat := Hex(append([]string{}, test.entree...))
+
+			if len(resultat) != len(test.attendu) {
+				t.Fatalf("Hex(%v) = %v, attendu %v",
+					test.entree, resultat, test.attendu)
+			}
+
+			for i := 0; i < len(test.attendu); i++ {
+				if resultat[i] != test.attendu[i] {
+					t.Errorf("Hex(%v) = %v, attendu %v",
+						test.entree, resultat, test.attendu)
+					break
+				}
+			}
+		})
+	}
+}

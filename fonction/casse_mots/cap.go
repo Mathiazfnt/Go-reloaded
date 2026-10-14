@@ -1,28 +1,8 @@
-package fonction
-
-import ("strconv"
-		"strings"
-	)
-
-func tocap(mot string) string {
-	var tempo rune
-	var result string
-	fait := true
-
-	for i := 0; i < len(mot); i++ {
-		if mot[i] >= 'a' && mot[i] <= 'z' && fait {
-			fait = false
-			tempo = rune(mot[i])
-			tempo -= 32
-			result += string(tempo)
-		} else {
-			result += string(rune(mot[i]))
-		}
-	}
-
-	return result
-}
-
+package casse_mots
+import (
+	"strconv"
+	"strings"
+)
 
 func Cap(tab []string) []string {
 	for mot := 0; mot < len(tab); mot++ {

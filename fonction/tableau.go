@@ -19,7 +19,3 @@ func Creertab(phrase string) []string {
 
 	return matrice
 }
-
-func RefaireTexte_tab(tab []string) string {
-	return strings.Join(tab, " ")
-}

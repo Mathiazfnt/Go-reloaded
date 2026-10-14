@@ -1,11 +1,10 @@
-package fonction
+package conversions_numeriques__a_an
 
 import (
+	d "Go-reloaded/fonction/casse_mots"
 	"strconv"
 	"strings"
-	d "Go-reloaded/fonction/casse_mots"
 )
-
 
 func Bin(tab []string) []string { // Binaire → décimal
 	for mot := 0; mot < len(tab); mot++ {
@@ -42,4 +41,3 @@ func Bin(tab []string) []string { // Binaire → décimal
 
 	return tab
 }
-

@@ -1,4 +1,4 @@
-package fonction
+package ponctuation
 
 func Ponct_spl(tab []string) []string {
 	ponct := []string{".", ",", "!", "?", ":", ";"}
