@@ -11,9 +11,9 @@ normalisés en espaces simples dans le résultat.
 
 ## Origine du projet
 
-Ce dépôt est issu du projet **Go-reloaded**. Les fonctionnalités regroupées
-dans le dossier `fonction/bonus/` proviennent d'une partie du projet
-**Go Reforged** et ont été intégrées à ce dépôt.
+Ce dépôt met en œuvre le sujet **Go-reloaded**. Des fonctionnalités
+supplémentaires inspirées d'une partie du sujet **Go Reforged** sont séparées
+dans [`fonction/bonus/readme.md`](fonction/bonus/readme.md).
 
 ## Prérequis
 
@@ -52,38 +52,26 @@ instruction d'utilisation si le nombre d'arguments est incorrect.
 
 ## Règles prises en charge
 
-Les commandes de casse, de titre, d'inversion et les conversions numériques
-agissent sur le ou les mots placés avant leur marqueur. Le nombre est facultatif
-et indique combien de mots précédents traiter.
+Les commandes listées ci-dessous décrivent les règles de Go-reloaded. Les
+fonctionnalités ajoutées dans le dossier `fonction/bonus/` sont présentées dans
+son [README dédié](fonction/bonus/readme.md).
 
 | Règle | Exemple d'entrée | Résultat |
 | --- | --- | --- |
 | Hexadécimal vers décimal | `2a (hex)` | `42` |
 | Binaire vers décimal | `1010 (bin)` | `10` |
-| Octal vers décimal | `17 (oct)` | `15` |
-| Décimal vers binaire | `10 (to bin)` | `1010` |
-| Décimal vers hexadécimal | `255 (to hex)` | `ff` |
-| Romain vers décimal | `XIV (roman)` | `14` |
-| Décimal vers romain | `14 (to_roman)` | `XIV` |
 | Tout en majuscules | `bonjour (up)` | `BONJOUR` |
 | Tout en minuscules | `BONJOUR (low)` | `bonjour` |
 | Première lettre en majuscule | `bonjour (cap)` | `Bonjour` |
-| Casse de titre | `the lord of the rings (title, 5)` | `the Lord of the Rings` |
-| Inverser un mot | `bonjour (rev)` | `ruojnob` |
-| Inverser deux mots | `bonjour salut (rev, 2)` | `ruojnob tulas` |
 | Ajuster `a` / `an` | `a apple and an banana` | `an apple and a banana` |
 | Rapprocher la ponctuation | `bonjour ,monde !` | `bonjour, monde!` |
 | Points et `!?` | `attends .. vraiment !?` | `attends.. vraiment!?` |
 | Apostrophes et guillemets | `' bonjour '` | `'bonjour'` |
 
-Les formes avec un nombre comprennent par exemple `(up, 2)`, `(low, 3)`,
-`(cap, 2)`, `(title, 5)`, `(rev, 2)`, `(to bin, 2)` et `(to hex, 2)`.
-La conversion octale `(oct)` traite un seul nombre précédent. Les conversions
-romaines acceptent les nombres de 1 à 3999 et les chiffres romains canoniques.
+Pour `(up)`, `(low)` et `(cap)`, un nombre facultatif indique combien de mots
+précédents traiter, par exemple `(up, 2)`.
 
-Les règles sont appliquées dans l'ordre défini dans `main.go`. Les conversions
-numériques sont indépendantes : elles ne réalisent pas d'opérations
-arithmétiques entre les valeurs.
+Les règles sont appliquées dans l'ordre défini dans `main.go`.
 
 ## Limites connues
 
@@ -91,16 +79,15 @@ arithmétiques entre les valeurs.
   suivant et utilise une liste limitée aux voyelles ASCII et à `h`.
 - La règle des points de suspension colle actuellement deux points (`..`),
   même lorsque l'entrée en contient trois.
-- Les nombres invalides pour certaines conversions peuvent rester inchangés ;
-  une syntaxe ou un nombre invalide dans `(rev, nombre)` est signalé comme une
-  erreur avec le numéro de ligne.
-- Les conversions romaines acceptent uniquement les valeurs comprises entre
-  1 et 3999 ; les chiffres romains doivent respecter leur écriture canonique.
+- Les nombres invalides pour les conversions hexadécimales ou binaires peuvent
+  rester inchangés.
+- Les fonctionnalités supplémentaires inspirées de Go Reforged sont
+  documentées dans le [README du dossier bonus](fonction/bonus/readme.md).
 
 ## Exemple fourni
 
-`sample.txt` contient un exemple par règle active et `result.txt` contient le
-résultat généré par cette commande :
+`sample.txt` contient des exemples des règles principales et des fonctionnalités
+bonus. `result.txt` contient le résultat généré par cette commande :
 
 ```powershell
 go run . sample.txt result.txt
@@ -146,23 +133,6 @@ go test ./...
     │   ├── ponctuation_spl_test.go
     │   ├── exclama_inter.go
     │   └── exclama_inter_test.go
-    └── bonus/
-        ├── conversions_numeriques_bonus/
-        │   ├── oct.go
-        │   ├── oct_test.go
-        │   ├── to_bin.go
-        │   ├── to_bin_test.go
-        │   ├── to_hex.go
-        │   └── to_hex_test.go
-        ├── nouveaux_modificateurs/
-        │   ├── rev.go
-        │   ├── rev_test.go
-        │   ├── title.go
-        │   └── title_test.go
-        └── roman/
-            ├── roman.go
-            ├── to_roman.go
-            └── valide.go
 ```
 
 - `main.go` lit le fichier d'entrée, applique les règles et écrit le résultat.
@@ -174,9 +144,5 @@ go test ./...
   hexadécimale et binaire vers décimal et l'ajustement de `a` et `an`.
 - `fonction/ponctuation/` regroupe le traitement de la ponctuation, des
   apostrophes et des guillemets.
-- `fonction/bonus/conversions_numeriques_bonus/` contient les conversions
-  octale, décimale vers binaire et décimale vers hexadécimale.
-- `fonction/bonus/nouveaux_modificateurs/` contient les modificateurs `rev`
-  et `title`.
-- `fonction/bonus/roman/` contient les conversions entre chiffres romains et
-  nombres décimaux ; elles sont activées dans `main.go`.
+- Les fonctionnalités bonus issues d'une partie de Go Reforged sont décrites
+  dans [`fonction/bonus/readme.md`](fonction/bonus/readme.md).
