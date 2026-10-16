@@ -12,7 +12,7 @@ import (
 	fp "Go-reloaded/fonction/ponctuation"
 
 	fbcn "Go-reloaded/fonction/bonus/conversions_numeriques_bonus"
-	// froman "Go-reloaded/fonction/bonus/roman"
+	fro "Go-reloaded/fonction/bonus/roman"
 	fm "Go-reloaded/fonction/bonus/nouveaux_modificateurs"
 )
 
@@ -70,8 +70,8 @@ func regles(tab []string) ([]string, error) {
 	tab = fbcn.Oct(tab)
 	tab = fbcn.To_bin(tab)
 	tab = fbcn.To_hex(tab)
-	//tab = froman.Roman(tab)
-	// tab = froman.To_roman(tab)
+	tab = fro.Roman(tab)
+	tab = fro.To_roman(tab)
 	var err error
 	tab, err = fm.Rev(tab)
 	if err != nil {

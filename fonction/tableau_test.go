@@ -1,4 +1,3 @@
-
 package fonction
 
 import "testing"

@@ -35,7 +35,8 @@ func Rev(tab []string) ([]string, error) {
 
 			mot--
 
-			for i := 0; i < fc.Depassement(tab, mot, nombre); i++ {
+			limite := fc.Depassement(tab, mot+1, nombre)
+			for i := 0; i < limite; i++ {
 				if mot < 0 {
 					break
 				}

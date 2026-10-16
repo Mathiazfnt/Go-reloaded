@@ -1,16 +1,29 @@
 package roman
 
-import "strconv"
+import (
+	"strconv"
+)
 
-func Roman(tab []string) []string { // Chiffre romain valide → décimal
+// 4. Vérifie que le chiffre romain est correctement écrit,
+// puis renvoie l'entier correspondant.
+
+func Roman(tab []string) []string { // Chiffre romain → décimal
 	for mot := 0; mot < len(tab); mot++ {
 		if tab[mot] == "(roman)" {
-			if mot > 0 && valide(tab[mot-1]) {
-				tab[mot-1] = roman(tab[mot-1])
+			// Supprime (roman)
+			tab = append(tab[:mot], tab[mot+1:]...)
 
-				// Supprime (roman)
-				tab = append(tab[:mot], tab[mot+1:]...)
-				mot--
+			mot--
+
+			// Vérifie qu'il existe un mot avant
+			if mot >= 0 {
+				// Vérifie que le chiffre romain est valide
+				if Valide(tab[mot]) && tab[mot] == to_roman(roman(tab[mot])){
+					nombre := roman(tab[mot])
+
+					// décimal -> string
+					tab[mot] = strconv.Itoa(nombre)
+				}
 			}
 		}
 	}
@@ -18,25 +31,32 @@ func Roman(tab []string) []string { // Chiffre romain valide → décimal
 	return tab
 }
 
-func roman(str string) string { // Chiffre romain valide → décimal
-	if !valide(str) {
-		return str
+// 2. Convertit un chiffre romain en entier.
+func roman(texte string) int {
+	if !Valide(texte) {
+		return 0
 	}
 
-	roman := map[string]int{
-		"I": 1, "V": 5, "X": 10, "L": 50,
-		"C": 100, "D": 500, "M": 1000,
+	valeurs := map[rune]int{
+		'I': 1,
+		'V': 5,
+		'X': 10,
+		'L': 50,
+		'C': 100,
+		'D': 500,
+		'M': 1000,
 	}
 
-	somme := 0
+	resultat := 0
+	lettres := []rune(texte)
 
-	for elt := 0; elt < len(str); elt++ {
-		if elt+1 < len(str) && roman[string(str[elt])] < roman[string(str[elt+1])] {
-			somme -= roman[string(str[elt])]
+	for i := 0; i < len(lettres); i++ {
+		if i+1 < len(lettres) && valeurs[lettres[i]] < valeurs[lettres[i+1]] {
+			resultat -= valeurs[lettres[i]]
 		} else {
-			somme += roman[string(str[elt])]
+			resultat += valeurs[lettres[i]]
 		}
 	}
 
-	return strconv.Itoa(somme)
+	return resultat
 }

@@ -3,37 +3,19 @@
 ## Présentation
 
 Go-reloaded est un programme en ligne de commande qui lit un fichier texte,
-applique des règles de formatage et écrit le résultat dans le fichier de sortie
-indiqué en argument. Le fichier d'entrée n'est pas modifié.
+applique des règles de conversion et de formatage, puis écrit le résultat dans
+un fichier de sortie. Le fichier d'entrée reste inchangé.
 
-## Fonctionnalités
-
-- Convertir une valeur hexadécimale suivie de `(hex)` en décimal.
-- Convertir une valeur binaire suivie de `(bin)` en décimal.
-- Modifier la casse des mots avec `(up)`, `(low)` et `(cap)`. Un nombre
-  permet d'appliquer la règle à plusieurs mots précédents, par exemple
-  `(up, 2)`.
-- Tenter d'ajuster `a` et `an` selon le token qui suit.
-- Rapprocher certains signes de ponctuation séparés par des espaces.
-- Traiter les points de suspension et les apostrophes entourant un mot.
-
-Les règles sont appliquées dans l'ordre défini dans `main.go`. L'ajustement de
-`a` et `an` ne reconnaît pas systématiquement la première lettre d'un mot ;
-le traitement des points de suspension est lui aussi limité.
-
-## Technologies
-
-- Go (version déclarée dans `go.mod` : Go 1.27.1).
-- Bibliothèque standard Go pour la lecture des fichiers, le traitement du
-  texte et les conversions.
+Le texte est traité ligne par ligne. Les espaces multiples d'une ligne sont
+normalisés en espaces simples dans le résultat.
 
 ## Prérequis
 
-- Installer une version de Go compatible avec le fichier `go.mod`.
-- Git est nécessaire uniquement pour cloner le dépôt.
+- Go 1.27.1 ou une version compatible avec celle déclarée dans `go.mod`.
+- Git uniquement pour cloner le dépôt.
 
-Aucune base de données, variable d'environnement ou configuration externe
-n'est nécessaire.
+Le projet n'utilise que la bibliothèque standard de Go et ne nécessite aucune
+configuration externe.
 
 ## Installation
 
@@ -42,63 +24,86 @@ git clone https://github.com/Mathiazfnt/Go-reloaded.git
 cd Go-reloaded
 ```
 
-## Lancement
+## Utilisation
 
-Depuis la racine du dépôt, fournir le chemin du fichier d'entrée puis celui du
-fichier de sortie :
+Depuis la racine du dépôt, indique le fichier d'entrée puis le fichier de
+sortie :
 
 ```powershell
 go run . sample.txt result.txt
 ```
 
-Le fichier de sortie est créé s'il n'existe pas et son contenu est remplacé à
-chaque exécution. Les deux chemins peuvent être adaptés.
-
-Il est aussi possible de compiler le programme puis de l'exécuter :
+Le fichier de sortie est créé s'il n'existe pas et remplacé s'il existe déjà.
+Pour compiler puis lancer le programme :
 
 ```powershell
 go build -o go-reloaded.exe .
 .\go-reloaded.exe sample.txt result.txt
 ```
 
-Le programme attend exactement deux arguments. Sans le chemin d'entrée et le
-chemin de sortie, il affiche la commande d'utilisation.
+Le programme attend exactement deux chemins en argument. Il affiche une
+instruction d'utilisation si le nombre d'arguments est incorrect.
 
-## Exemple d'utilisation
+## Règles prises en charge
 
-Le fichier `sample.txt` du dépôt sert d'exemple d'entrée et couvre plusieurs
-règles :
+Les commandes de casse, de titre, d'inversion et les conversions numériques
+agissent sur le ou les mots placés avant leur marqueur. Le nombre est facultatif
+et indique combien de mots précédents traiter.
 
-- `(cap)` et `(cap, 6)` pour capitaliser un ou plusieurs mots précédents ;
-- `(up)` et `(low, 3)` pour modifier leur casse ;
-- `(hex)` et `(bin)` pour convertir des nombres ;
-- des signes de ponctuation séparés par des espaces et des points de
-  suspension.
+| Règle | Exemple d'entrée | Résultat |
+| --- | --- | --- |
+| Hexadécimal vers décimal | `2a (hex)` | `42` |
+| Binaire vers décimal | `1010 (bin)` | `10` |
+| Octal vers décimal | `17 (oct)` | `15` |
+| Décimal vers binaire | `10 (to bin)` | `1010` |
+| Décimal vers hexadécimal | `255 (to hex)` | `ff` |
+| Tout en majuscules | `bonjour (up)` | `BONJOUR` |
+| Tout en minuscules | `BONJOUR (low)` | `bonjour` |
+| Première lettre en majuscule | `bonjour (cap)` | `Bonjour` |
+| Casse de titre | `the lord of the rings (title, 5)` | `the Lord of the Rings` |
+| Inverser un mot | `bonjour (rev)` | `ruojnob` |
+| Inverser deux mots | `bonjour salut (rev, 2)` | `ruojnob tulas` |
+| Ajuster `a` / `an` | `a apple and an banana` | `an apple and a banana` |
+| Rapprocher la ponctuation | `bonjour ,monde !` | `bonjour, monde!` |
+| Points et `!?` | `attends .. vraiment !?` | `attends.. vraiment!?` |
+| Apostrophes et guillemets | `' bonjour '` | `'bonjour'` |
 
-Lancer l'exemple avec :
+Les formes avec un nombre comprennent par exemple `(up, 2)`, `(low, 3)`,
+`(cap, 2)`, `(title, 5)`, `(rev, 2)`, `(to bin, 2)` et `(to hex, 2)`.
+La conversion octale `(oct)` traite un seul nombre précédent.
+
+Les règles sont appliquées dans l'ordre défini dans `main.go`. Les conversions
+numériques sont indépendantes : elles ne réalisent pas d'opérations
+arithmétiques entre les valeurs.
+
+## Limites connues
+
+- L'ajustement de `a` et `an` examine seulement le premier caractère du mot
+  suivant et utilise une liste limitée aux voyelles ASCII et à `h`.
+- La règle des points de suspension colle actuellement deux points (`..`),
+  même lorsque l'entrée en contient trois.
+- Les nombres invalides pour certaines conversions peuvent rester inchangés ;
+  une syntaxe ou un nombre invalide dans `(rev, nombre)` est signalé comme une
+  erreur avec le numéro de ligne.
+- Les règles de conversion romaine sont présentes dans le dossier `roman/`,
+  mais ne sont pas activées dans `main.go`.
+
+## Exemple fourni
+
+`sample.txt` contient un exemple par règle active et `result.txt` contient le
+résultat généré par cette commande :
 
 ```powershell
 go run . sample.txt result.txt
 ```
 
-Le programme écrit le texte transformé dans `result.txt`. Les conversions
-sont individuelles : `42 (hex)` devient `66` et `10 (bin)` devient `2` ;
-le programme ne fait pas l'addition suggérée par la phrase d'exemple. De
-même, l'ajustement de `a` et `an` ne détecte pas encore de façon fiable la
-première lettre du mot suivant, et le traitement de `...` peut le réduire à
-`..`. Ces exemples permettent donc aussi d'observer les limites actuelles du
-traitement.
-
 ## Tests
 
-Lancer les tests et la vérification de compilation depuis la racine :
+Exécuter les tests et vérifier la compilation de tous les packages avec :
 
 ```powershell
 go test ./...
 ```
-
-Les packages du projet ne contiennent pas encore de tests automatisés ;
-cette commande vérifie principalement leur compilation.
 
 ## Architecture
 
@@ -107,30 +112,59 @@ cette commande vérifie principalement leur compilation.
 ├── main.go
 ├── sample.txt
 ├── result.txt
-├── fonction/
-│   ├── tableau.go
-│   ├── casse_mots/
-│   │   ├── cap.go
-│   │   ├── low.go
-│   │   └── upp.go
-│   ├── conversions_numeriques__a_an/
-│   │   ├── a_an.go
-│   │   ├── bin.go
-│   │   └── hex.go
-│   └── ponctuation/
-│       ├── apostrophes.go
-│       ├── exclama_inter.go
-│       ├── ponctuation_spl.go
-│       └── trois_point.go
+└──; fonction/
+    ├── tableau.go
+    ├── tableau_test.go
+    ├── casse_mots/
+    │   ├── cap.go
+    │   ├── cap_test.go
+    │   ├── low.go
+    │   ├── low_test.go
+    │   ├── upp.go
+    │   ├── upp_test.go
+    │   ├── depassement.go
+    │   └── depassement_test.go
+    ├── conversions_numeriques__a_an/
+    │   ├── a_an.go
+    │   ├── a_an_test.go
+    │   ├── bin.go
+    │   ├── bin_test.go
+    │   └── hex.go
+    ├── ponctuation/
+    │   ├── apostrophes.go
+    │   ├── apostrophe_test.go
+    │   ├── ponctuation_spl.go
+    │   ├── ponctuation_spl_test.go
+    │   ├── exclama_inter.go
+    │   └── exclama_inter_test.go
+    └── bonus/
+        ├── conversions_numeriques_bonus/
+        │   ├── oct.go
+        │   ├── oct_test.go
+        │   ├── to_bin.go
+        │   ├── to_bin_test.go
+        │   ├── to_hex.go
+        │   └── to_hex_test.go
+        ├── nouveaux_modificateurs/
+        │   ├── rev.go
+        │   ├── rev_test.go
+        │   ├── title.go
+        │   └── title_test.go
+        └── roman/
+            ├── roman.go
+            ├── to_roman.go
+            └── valide.go
 ```
 
-- `main.go` lit le fichier d'entrée passé en premier argument, traite le texte
-  ligne par ligne et écrit dans le fichier de sortie passé en second argument.
-- `fonction/tableau.go` regroupe les mots d'une ligne en tenant compte des
-  directives écrites entre parenthèses.
-- `fonction/casse_mots/` contient les règles de casse.
-- `fonction/conversions_numeriques__a_an/` contient les conversions numériques
-  et l'ajustement de `a` et `an`.
-- `fonction/ponctuation/` contient les traitements de ponctuation.
-- `sample.txt` est un exemple de fichier d'entrée ; `result.txt` est le fichier
-  de sortie utilisé dans les exemples de lancement.
+- `main.go` lit le fichier d'entrée, applique les règles et écrit le résultat.
+- `fonction/tableau.go` regroupe les mots d'une ligne et conserve ensemble les
+  commandes entre parenthèses.
+- `fonction/casse_mots/` contient les règles de casse et le calcul du nombre de
+  mots à traiter.
+- `fonction/conversions_numeriques__a_an/` contient les conversions
+  hexadécimale et binaire vers décimal et l'ajustement de `a` et `an`.
+- `fonction/ponctuation/` regroupe le traitement de la ponctuation, des
+  apostrophes et des guillemets.
+- `fonction/bonus/` contient les conversions supplémentaires et les
+  modificateurs `rev` et `title`. Le sous-dossier `roman/` n'est pas encore
+  raccordé au traitement principal.

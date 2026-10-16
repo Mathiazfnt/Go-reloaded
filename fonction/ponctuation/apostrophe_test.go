@@ -1,4 +1,3 @@
-
 package ponctuation
 
 import "testing"

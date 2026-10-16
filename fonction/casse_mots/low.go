@@ -21,7 +21,8 @@ func Low(tab []string) []string {
 
 			mot--
 
-			for i := 0; i < Depassement(tab, mot, nombre); i++ {
+			limite := Depassement(tab, mot+1, nombre)
+			for i := 0; i < limite; i++ {
 				if mot < 0 {
 					break
 				}

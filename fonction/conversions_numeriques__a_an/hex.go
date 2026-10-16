@@ -21,7 +21,8 @@ func Hex(tab []string) []string { // Hexadécimal → décimal
 			mot--
 
 			// Applique la règle aux mots précédents
-			for i := 0; i < d.Depassement(tab, mot, nombre); i++ {
+			limite := d.Depassement(tab, mot+1, nombre)
+			for i := 0; i < limite; i++ {
 				if mot < 0 {
 					break
 				}

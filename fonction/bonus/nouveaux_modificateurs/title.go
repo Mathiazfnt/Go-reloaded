@@ -1,19 +1,25 @@
 package nouveaux_modificateurs
 
-import( fc "Go-reloaded/fonction/casse_mots"
-			"strings"
-			"strconv"
-			
+import (
+	fc "Go-reloaded/fonction/casse_mots"
+	"strconv"
+	"strings"
 )
 
 func MajPremiere(mot string) string {
-	if mot == "" {
+	lettres := []rune(mot)
+	if len(lettres) == 0 {
 		return mot
 	}
-	return strings.ToUpper(mot[:1]) + strings.ToLower(mot[1:])
+	return strings.ToUpper(string(lettres[0])) + strings.ToLower(string(lettres[1:]))
 }
 
-func Title(tab []string) []string{
+func Title(tab []string) []string {
+	motsOutils := map[string]bool{
+		"a": true, "an": true, "the": true, "of": true, "and": true,
+		"or": true, "in": true, "on": true, "at": true, "to": true,
+	}
+
 	for mot := 0; mot < len(tab); mot++ {
 		if strings.HasPrefix(tab[mot], "(title") {
 
@@ -28,12 +34,17 @@ func Title(tab []string) []string{
 
 			mot--
 
-			for i := 0; i < fc.Depassement(tab, mot, nombre); i++ {
+			limite := fc.Depassement(tab, mot+1, nombre)
+			for i := 0; i < limite; i++ {
 				if mot < 0 {
 					break
 				}
 
-				tab[mot] = MajPremiere(tab[mot])
+				if motsOutils[strings.ToLower(tab[mot])] {
+					tab[mot] = strings.ToLower(tab[mot])
+				} else {
+					tab[mot] = MajPremiere(tab[mot])
+				}
 				mot--
 			}
 

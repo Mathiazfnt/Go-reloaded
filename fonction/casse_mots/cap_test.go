@@ -1,4 +1,3 @@
-
 package casse_mots
 
 import "testing"
