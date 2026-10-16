@@ -9,6 +9,12 @@ un fichier de sortie. Le fichier d'entrée reste inchangé.
 Le texte est traité ligne par ligne. Les espaces multiples d'une ligne sont
 normalisés en espaces simples dans le résultat.
 
+## Origine du projet
+
+Ce dépôt est issu du projet **Go-reloaded**. Les fonctionnalités regroupées
+dans le dossier `fonction/bonus/` proviennent d'une partie du projet
+**Go Reforged** et ont été intégrées à ce dépôt.
+
 ## Prérequis
 
 - Go 1.27.1 ou une version compatible avec celle déclarée dans `go.mod`.
@@ -57,6 +63,8 @@ et indique combien de mots précédents traiter.
 | Octal vers décimal | `17 (oct)` | `15` |
 | Décimal vers binaire | `10 (to bin)` | `1010` |
 | Décimal vers hexadécimal | `255 (to hex)` | `ff` |
+| Romain vers décimal | `XIV (roman)` | `14` |
+| Décimal vers romain | `14 (to_roman)` | `XIV` |
 | Tout en majuscules | `bonjour (up)` | `BONJOUR` |
 | Tout en minuscules | `BONJOUR (low)` | `bonjour` |
 | Première lettre en majuscule | `bonjour (cap)` | `Bonjour` |
@@ -70,7 +78,8 @@ et indique combien de mots précédents traiter.
 
 Les formes avec un nombre comprennent par exemple `(up, 2)`, `(low, 3)`,
 `(cap, 2)`, `(title, 5)`, `(rev, 2)`, `(to bin, 2)` et `(to hex, 2)`.
-La conversion octale `(oct)` traite un seul nombre précédent.
+La conversion octale `(oct)` traite un seul nombre précédent. Les conversions
+romaines acceptent les nombres de 1 à 3999 et les chiffres romains canoniques.
 
 Les règles sont appliquées dans l'ordre défini dans `main.go`. Les conversions
 numériques sont indépendantes : elles ne réalisent pas d'opérations
@@ -85,8 +94,8 @@ arithmétiques entre les valeurs.
 - Les nombres invalides pour certaines conversions peuvent rester inchangés ;
   une syntaxe ou un nombre invalide dans `(rev, nombre)` est signalé comme une
   erreur avec le numéro de ligne.
-- Les règles de conversion romaine sont présentes dans le dossier `roman/`,
-  mais ne sont pas activées dans `main.go`.
+- Les conversions romaines acceptent uniquement les valeurs comprises entre
+  1 et 3999 ; les chiffres romains doivent respecter leur écriture canonique.
 
 ## Exemple fourni
 
@@ -112,7 +121,7 @@ go test ./...
 ├── main.go
 ├── sample.txt
 ├── result.txt
-└──; fonction/
+└── fonction/
     ├── tableau.go
     ├── tableau_test.go
     ├── casse_mots/
@@ -165,6 +174,9 @@ go test ./...
   hexadécimale et binaire vers décimal et l'ajustement de `a` et `an`.
 - `fonction/ponctuation/` regroupe le traitement de la ponctuation, des
   apostrophes et des guillemets.
-- `fonction/bonus/` contient les conversions supplémentaires et les
-  modificateurs `rev` et `title`. Le sous-dossier `roman/` n'est pas encore
-  raccordé au traitement principal.
+- `fonction/bonus/conversions_numeriques_bonus/` contient les conversions
+  octale, décimale vers binaire et décimale vers hexadécimale.
+- `fonction/bonus/nouveaux_modificateurs/` contient les modificateurs `rev`
+  et `title`.
+- `fonction/bonus/roman/` contient les conversions entre chiffres romains et
+  nombres décimaux ; elles sont activées dans `main.go`.

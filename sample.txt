@@ -12,6 +12,8 @@ really !?now
 17 (oct)
 10 5 (to bin, 2)
 255 16 (to hex, 2)
+XIV (roman)
+14 (to_roman)
 bonjour salut (rev, 2)
 éléphant (rev)
 the lord of the rings (title, 5)

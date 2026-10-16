@@ -1,10 +1,14 @@
 package nouveaux_modificateurs
 
 import (
-	fc "Go-reloaded/fonction/casse_mots"
 	"strconv"
 	"strings"
 )
+
+var titleMotsOutils = map[string]bool{
+	"a": true, "an": true, "the": true, "of": true, "and": true,
+	"or": true, "in": true, "on": true, "at": true, "to": true,
+}
 
 func MajPremiere(mot string) string {
 	lettres := []rune(mot)
@@ -15,40 +19,37 @@ func MajPremiere(mot string) string {
 }
 
 func Title(tab []string) []string {
-	motsOutils := map[string]bool{
-		"a": true, "an": true, "the": true, "of": true, "and": true,
-		"or": true, "in": true, "on": true, "at": true, "to": true,
-	}
-
 	for mot := 0; mot < len(tab); mot++ {
 		if strings.HasPrefix(tab[mot], "(title") {
-
 			nombre := 1
-
 			if tab[mot] != "(title)" {
-				texte := tab[mot][8 : len(tab[mot])-1]
-				nombre, _ = strconv.Atoi(texte)
+				if strings.HasSuffix(tab[mot], ")") && len(tab[mot]) > 8 {
+					texte := strings.TrimSpace(tab[mot][8 : len(tab[mot])-1])
+					if valeur, err := strconv.Atoi(texte); err == nil {
+						nombre = valeur
+					}
+				}
+			}
+
+			if nombre < 0 {
+				nombre = -nombre
+			}
+			debut := mot - nombre
+			if debut < 0 {
+				debut = 0
 			}
 
 			tab = append(tab[:mot], tab[mot+1:]...)
 
-			mot--
-
-			limite := fc.Depassement(tab, mot+1, nombre)
-			for i := 0; i < limite; i++ {
-				if mot < 0 {
-					break
-				}
-
-				if motsOutils[strings.ToLower(tab[mot])] {
-					tab[mot] = strings.ToLower(tab[mot])
+			for i := debut; i < mot; i++ {
+				if i == debut || !titleMotsOutils[strings.ToLower(tab[i])] {
+					tab[i] = MajPremiere(tab[i])
 				} else {
-					tab[mot] = MajPremiere(tab[mot])
+					tab[i] = strings.ToLower(tab[i])
 				}
-				mot--
 			}
 
-			mot += nombre
+			mot--
 		}
 	}
 

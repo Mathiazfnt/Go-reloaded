@@ -24,6 +24,11 @@ func TestTitle(t *testing.T) {
 			[]string{"Bonjour"},
 		},
 		{
+			"Première lettre accentuée",
+			[]string{"éCOLE", "(title)"},
+			[]string{"École"},
+		},
+		{
 			"Deux mots",
 			[]string{"bonjour", "monde", "(title, 2)"},
 			[]string{"Bonjour", "Monde"},
@@ -57,6 +62,11 @@ func TestTitle(t *testing.T) {
 			"Nombre supérieur aux mots disponibles",
 			[]string{"bonjour", "(title, 5)"},
 			[]string{"Bonjour"},
+		},
+		{
+			"Nombre égal à zéro",
+			[]string{"bonjour", "(title, 0)"},
+			[]string{"bonjour"},
 		},
 		{
 			"Plusieurs marqueurs",
